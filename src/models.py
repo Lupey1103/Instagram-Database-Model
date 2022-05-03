@@ -24,7 +24,54 @@ class Address(Base):
     street_number = Column(String(250))
     post_code = Column(String(250), nullable=False)
     person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    person = relationship('Person')
+
+class Post(Base):
+    __tablename__ = 'post'
+    id = Column(Integer, primary_key=True)
+    #image_id = Column(Integer, ForeignKey('image.id'))
+    #image = relationship(Image)
+    #likes_id = Column(Integer, ForeignString('likes.id'))
+    #likes = relationship(Likes)
+    comments_id = Column(Integer, ForeignKey('comments.id'))
+    comments = relationship('Comments')
+
+class User(Base):
+    __tablename__ = 'user'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(250), nullable=False)
+    last_number = Column(String(250), nullable=False)
+    user_id = Column(String(250), nullable=False)
+    password = Column(String(250), nullable=False)
+    post_code = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship('Post')
+
+class Comments(Base):
+    __tablename__ = 'comments'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User')
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship('Post')
+    comment_text = Column(String(250), nullable=False)
+
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    type = Column(String(50), nullable=False)
+    url = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship('Post')
+
+class Followers(Base):
+    __tablename__ = 'followers'
+    id = Column(Integer, primary_key=True)
+    user_to_id = Column(Integer(250), ForeignKey('user.id'))
+    user_from_id = Column(Integer(250), ForeignKey('user.id'))
+    user = relationship('User')
 
     def to_dict(self):
         return {}
